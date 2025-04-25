@@ -23,7 +23,9 @@ class Game:
         
         # Create toggle button
         self.button_rect = pygame.Rect(10, self.screen_height - 40, 100, 30)  # x, y, width, height
-        self.button_color = (100, 100, 100)  # Gray color
+         self.button_color_base = (100, 100, 100)  # Gray color
+        self.button_color = self.button_color_base
+        self.button_hover_color = (255, 20, 147) # color for when hover on button
         self.button_hover = False
         
         self.setup_gl()
@@ -176,7 +178,7 @@ class Game:
         glDisable(GL_DEPTH_TEST)
         
         # Draw button background
-        button_color = (150, 150, 150) if self.button_hover else (100, 100, 100)
+        button_color = self.button_hover_color if self.button_hover else self.button_color_base
         
         # Convert button rect to raw OpenGL commands for guaranteed visibility
         glBegin(GL_QUADS)
