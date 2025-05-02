@@ -23,7 +23,7 @@ class Game:
         
         # Create toggle button
         self.button_rect = pygame.Rect(10, self.screen_height - 40, 100, 30)  # x, y, width, height
-         self.button_color_base = (100, 100, 100)  # Gray color
+        self.button_color_base = (100, 100, 100)  # Gray color
         self.button_color = self.button_color_base
         self.button_hover_color = (255, 20, 147) # color for when hover on button
         self.button_hover = False
@@ -93,7 +93,7 @@ class Game:
                         self.environment.rectangle.toggle()
                 elif event.type == pygame.MOUSEMOTION:
                     mouse_pos = pygame.mouse.get_pos()
-                    self.button_hovered = self.button_rect.collidepoint(mouse_pos)
+                    self.button_hover = self.button_rect.collidepoint(mouse_pos)
                 
                 # Then pass to environment for rotation
                 self.environment.handle_mouse(event)
@@ -147,6 +147,10 @@ class Game:
             self.environment.drone1.move_forward()
         if keys[pygame.K_s]:
             self.environment.drone1.move_backward()
+        if keys[pygame.K_q]:
+            self.environment.drone1.move_upward()
+        if keys[pygame.K_e]:
+            self.environment.drone1.move_downward()
         if keys[pygame.K_a]:
             self.environment.drone1.rotate_left()
         if keys[pygame.K_d]:
@@ -157,6 +161,10 @@ class Game:
             self.environment.drone2.move_forward()
         if keys[pygame.K_DOWN]:
             self.environment.drone2.move_backward()
+        if keys[pygame.K_RSHIFT]:
+            self.environment.drone2.move_upward()
+        if keys[pygame.K_m]:
+            self.environment.drone2.move_downward()
         if keys[pygame.K_LEFT]:
             self.environment.drone2.rotate_left()
         if keys[pygame.K_RIGHT]:
@@ -176,7 +184,7 @@ class Game:
         # Disable everything that could interfere with 2D rendering
         glDisable(GL_LIGHTING)
         glDisable(GL_DEPTH_TEST)
-        
+
         # Draw button background
         button_color = self.button_hover_color if self.button_hover else self.button_color_base
         
@@ -197,12 +205,6 @@ class Game:
         glVertex2f(self.button_rect.right, self.button_rect.bottom)
         glVertex2f(self.button_rect.left, self.button_rect.bottom)
         glEnd()
-        
-        # Draw text using pygame's surface
-        font = pygame.font.Font(None, 24)
-        text = font.render('Toggle', True, (255, 255, 255))
-        text_rect = text.get_rect(center=self.button_rect.center)
-        pygame.display.get_surface().blit(text, text_rect)
         
         # Restore OpenGL state
         glMatrixMode(GL_PROJECTION)

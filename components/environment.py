@@ -64,25 +64,46 @@ class Environment(GameObject):
         self.drone1.environment = self
         self.drone2.environment = self
         
-        # Position bases on the floor
-        self.base1.position = [-15, -5, 0]   # Left front
-        self.base2.position = [15, -5, 0]    # Right front
+        # Store initial positions and rotations
+        self.initial_positions = {
+            'drone1': {'pos': [-10, -3, 0], 'rot': [0, 90, 0]},   # Left center, face right
+            'drone2': {'pos': [10, -3, 0], 'rot': [0, -90, 0]},    # Right center, face left
+            'flag1': {'pos': [-15, -5, 0]},  # On base1
+            'flag2': {'pos': [15, -5, 0]},   # On base2
+            'base1': {'pos': [-15, -5, 0]},  # Left side
+            'base2': {'pos': [15, -5, 0]}    # Right side
+        }
         
-        # Position flags on their bases
-        self.flag1.position = [-15, -5, 0]   # On base1
-        self.flag2.position = [15, -5, 0]    # On base2
+        # Set home positions for flags (this is where they'll return to)
+        self.flag1.set_home_position(self.initial_positions['flag1']['pos'])
+        self.flag2.set_home_position(self.initial_positions['flag2']['pos'])
         
-        # Position drones in the middle
-        self.drone1.position = [-10, -3, 0]  # Left center
-        self.drone2.position = [10, -3, 0]   # Right center
-        
-        # Make drones face each other
-        self.drone1.rotation = [0, 90, 0]   # Face right
-        self.drone2.rotation = [0, -90, 0]  # Face left
+        # Initialize positions
+        self.reset_game()
         
         # Position rectangle in the middle and rotate it
         self.rectangle.position = [0, -2, 0]  # Center on floor
         self.rectangle.rotation = [0, 75, 0]  # Rotate 30 degrees left around Y axis
+        
+    def reset_game(self):
+        """Reset all game objects to their initial positions"""
+        # Reset drone positions and rotations
+        self.drone1.position = self.initial_positions['drone1']['pos'].copy()
+        self.drone1.rotation = self.initial_positions['drone1']['rot'].copy()
+        self.drone2.position = self.initial_positions['drone2']['pos'].copy()
+        self.drone2.rotation = self.initial_positions['drone2']['rot'].copy()
+        
+        # Reset flag positions
+        self.flag1.position = self.initial_positions['flag1']['pos'].copy()
+        self.flag2.position = self.initial_positions['flag2']['pos'].copy()
+        
+        # Reset base positions
+        self.base1.position = self.initial_positions['base1']['pos'].copy()
+        self.base2.position = self.initial_positions['base2']['pos'].copy()
+        
+        # Clear captured flags
+        self.drone1.captured_flag = None
+        self.drone2.captured_flag = None
     
     def draw(self):
         # Save the current matrix and apply base transformations
